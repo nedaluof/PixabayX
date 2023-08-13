@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_8sdp"
+        app:cardBackgroundColor="@color/transparent"
+        app:cardCornerRadius="@dimen/_8sdp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:orientation="vertical"
+            android:padding="@dimen/_8sdp"
+            tools:background="@color/app_gray">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/error_msg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:textColor="@color/lite_gray"
+                android:textSize="@dimen/_12ssp"
+                tools:text="Timeout" />
+
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:indeterminateTint="@color/pi_piquant" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/retry_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:backgroundTint="@color/white"
+                app:cornerRadius="@dimen/_4sdp"
+                android:text="@string/retry_message"
+                android:textAllCaps="false"
+                android:textColor="@color/pi_piquant" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+</layout>

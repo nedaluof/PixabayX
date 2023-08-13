@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="photo"
+            type="com.nedaluof.domain.model.photos.PhotoModel" />
+    </data>
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/_12sdp"
+        android:layout_marginEnd="@dimen/_8sdp"
+        android:layout_marginBottom="@dimen/_8sdp"
+        android:clickable="true"
+        android:focusable="true"
+        app:cardBackgroundColor="@color/app_gray"
+        app:cardCornerRadius="@dimen/_8sdp"
+        app:cardElevation="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5"
+        app:rippleColor="@color/app_gray"
+        app:strokeColor="@color/lite_gray"
+        app:strokeWidth="0.8dp">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:minHeight="@dimen/_150sdp"
+            android:orientation="vertical">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/photo_image"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_150sdp"
+                android:scaleType="centerCrop"
+                app:loadUrl="@{photo.url}"
+                app:shapeAppearance="@style/ImageShapeRoundedBottomCornersMedium"
+                tools:src="@mipmap/ic_launcher" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/owner_image"
+                android:layout_width="@dimen/_55sdp"
+                android:layout_height="@dimen/_55sdp"
+                android:layout_gravity="center"
+                android:layout_marginTop="-40dp"
+                android:padding="@dimen/_2sdp"
+                android:scaleType="centerCrop"
+                app:loadUrl="@{photo.owner.profileImage}"
+                app:shapeAppearance="@style/CircleImageShape"
+                app:strokeColor="@color/pi_piquant"
+                app:strokeWidth="@dimen/_1sdp"
+                tools:src="@mipmap/ic_launcher" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/photo_owner_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_4sdp"
+                android:text="@{photo.owner.name}"
+                android:textAlignment="center"
+                android:textColor="@color/lite_gray"
+                tools:text="NedaluOf" />
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:layout_marginBottom="@dimen/_4sdp"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/downloads_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:ctrlVisibility="@{photo.downloads > 0}">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/downloads_image"
+                        android:layout_width="@dimen/_12sdp"
+                        android:layout_height="@dimen/_12sdp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_download"
+                        app:tint="@color/lite_gray" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/downloads_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/_4sdp"
+                        android:text="@{String.valueOf(photo.downloads)}"
+                        android:textColor="@color/pi_piquant"
+                        android:textSize="@dimen/_8ssp"
+                        tools:text="2017" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/views_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_12sdp"
+                    android:orientation="horizontal"
+                    app:ctrlVisibility="@{photo.views > 0}">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/views_image"
+                        android:layout_width="@dimen/_12sdp"
+                        android:layout_height="@dimen/_12sdp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_viewer"
+                        app:tint="@color/lite_gray" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/views_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/_4sdp"
+                        android:text="@{String.valueOf(photo.views)}"
+                        android:textColor="@color/pi_piquant"
+                        android:textSize="@dimen/_8ssp"
+                        tools:text="2017" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/likes_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/_4sdp"
+                android:orientation="horizontal"
+                app:ctrlVisibility="@{photo.likes > 0}">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/like_image"
+                    android:layout_width="@dimen/_12sdp"
+                    android:layout_height="@dimen/_12sdp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_favorite"
+                    app:tint="@color/lite_gray" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/likes_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/_4sdp"
+                    android:text="@{String.valueOf(photo.likes)}"
+                    android:textColor="@color/pi_piquant"
+                    android:textSize="@dimen/_10ssp"
+                    tools:text="2017" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </com.google.android.material.card.MaterialCardView>
+
+</layout>

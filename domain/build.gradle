@@ -1,0 +1,42 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-parcelize'
+    id 'kotlin-kapt'
+    id 'com.google.dagger.hilt.android'
+}
+apply from: "$rootDir/versions.gradle"
+
+android {
+    namespace 'com.nedaluof.domain'
+    compileSdkVersion versions.compileSdk
+
+    defaultConfig {
+        minSdk versions.minSdk
+        targetSdk versions.compileSdk
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = '17'
+    }   
+}
+
+dependencies {
+    //data  module
+    api project(path: ':data')
+    //hilt dependencies injection
+    implementation "com.google.dagger:hilt-android:$versions.hilt"
+    kapt "com.google.dagger:hilt-android-compiler:$versions.hilt"
+}

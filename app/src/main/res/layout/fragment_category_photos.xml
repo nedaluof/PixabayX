@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="category"
+            type="com.nedaluof.domain.model.category.CategoryModel" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/category_photos_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/bar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:background="@color/transparent"
+            app:elevation="0dp">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_marginTop="@dimen/_12sdp"
+                android:layout_marginEnd="@dimen/_8sdp"
+                android:layout_marginBottom="@dimen/_8sdp"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardBackgroundColor="@color/app_gray"
+                app:cardCornerRadius="@dimen/_8sdp"
+                app:cardElevation="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.5"
+                app:layout_scrollEffect="compress"
+                app:layout_scrollFlags="scroll|enterAlways|snap"
+                app:rippleColor="@color/app_gray"
+                app:strokeColor="@color/lite_gray"
+                app:strokeWidth="0.8dp">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/category_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_150sdp"
+                    android:scaleType="centerCrop"
+                    app:loadUrl="@{category.coverImage}"
+                    tools:src="@mipmap/ic_launcher" />
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/category_details"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:background="#B338393A"
+                    android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/category_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/_8sdp"
+                        android:layout_weight="1"
+                        android:text="@{category.name}"
+                        android:textColor="@color/pi_piquant"
+                        android:textSize="@dimen/_12ssp"
+                        android:textStyle="bold"
+                        tools:text="Wallpaper" />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+            </com.google.android.material.card.MaterialCardView>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/photos_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/_2sdp"
+            android:layout_marginEnd="@dimen/_2sdp"
+            android:orientation="vertical"
+            android:paddingTop="@dimen/_2sdp"
+            android:paddingBottom="@dimen/_2sdp"
+            android:scrollbars="none"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:spanCount="2"
+            tools:itemCount="5"
+            tools:listitem="@layout/item_photo" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

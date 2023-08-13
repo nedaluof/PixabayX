@@ -1,0 +1,40 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="Base.Theme.PixabayX" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/pi_piquant</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryVariant">@color/lite_gray</item>
+        <item name="colorAccent">@color/pi_piquant</item>
+        <item name="android:navigationBarColor">@color/app_gray</item>
+        <item name="android:windowBackground">@color/app_gray</item>
+        <item name="android:fontFamily">@font/merri_weather_sans_medium</item>
+    </style>
+
+    <style name="Theme.PixabayX" parent="Base.Theme.PixabayX">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+
+    <!--Image Shape Style-->
+    <style name="ImageShapeRoundedBottomCornersMedium">
+        <item name="cornerSizeBottomRight">@dimen/_15sdp</item>
+        <item name="cornerSizeBottomLeft">@dimen/_15sdp</item>
+        <item name="cornerFamilyBottomRight">rounded</item>
+        <item name="cornerFamilyBottomLeft">rounded</item>
+    </style>
+
+    <style name="ImageShapeRoundedCornersMedium">
+        <item name="cornerSize">@dimen/_15sdp</item>
+        <item name="shapeCornerFamily">rounded</item>
+    </style>
+
+    <style name="ImageShapeRoundedCornersHard">
+        <item name="cornerSize">5%</item>
+        <item name="shapeCornerFamily">rounded</item>
+    </style>
+
+    <style name="CircleImageShape">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+</resources>

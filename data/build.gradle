@@ -1,0 +1,82 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id 'com.google.dagger.hilt.android'
+}
+
+apply from: "$rootDir/versions.gradle"
+
+android {
+    namespace 'com.nedaluof.data'
+    compileSdkVersion versions.compileSdk
+
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file("local.properties").newDataInputStream())
+
+    defaultConfig {
+        minSdk versions.minSdk
+        targetSdk versions.compileSdk
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+        buildConfigField "String", "BASE_URL", "\"https://pixabay.com/api/\""
+        buildConfigField "String", "API_KEY", properties.getProperty("API_KEY", "")
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+}
+
+dependencies {
+    //room database
+    implementation "androidx.room:room-runtime:$versions.room"
+    implementation "androidx.room:room-ktx:$versions.room"
+    implementation "androidx.room:room-paging:$versions.room"
+    kapt "androidx.room:room-compiler:$versions.room_compiler"
+    //hilt dependencies injection
+    implementation "com.google.dagger:hilt-android:$versions.hilt"
+    kapt "com.google.dagger:hilt-android-compiler:$versions.hilt"
+    //paging3
+    api "androidx.paging:paging-runtime-ktx:$versions.paging"
+    /** remote **/
+    api ("com.squareup.retrofit2:retrofit:$versions.retrofit") { exclude module: 'okhttp' }
+    api  "com.squareup.retrofit2:converter-moshi:$versions.converter"
+    api  "com.squareup.okhttp3:logging-interceptor:$versions.interceptor"
+    api  "com.squareup.moshi:moshi:$versions.moshi"
+    kapt "com.squareup.moshi:moshi-kotlin-codegen:$versions.moshi"
+    //kotlinx-metadata
+    kapt "org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.5.0"
+    //DataStore
+    implementation "com.github.nedaluof:MiHawk:$versions.mihawk"
+    //coroutines
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.coroutines"
+    //kotlin reflect
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$versions.reflect"
+    //debugging
+    api "com.jakewharton.timber:timber:$versions.timber"
+    //de-sugaring
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.3'
+
+    // Testing
+    testImplementation "junit:junit:4.13.2"
+    testImplementation "androidx.arch.core:core-testing:2.2.0"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$versions.coroutines"
+    testImplementation "io.mockk:mockk:1.10.6"
+    testImplementation "com.squareup.okhttp3:mockwebserver:4.10.0"
+    androidTestImplementation "androidx.test.ext:junit:1.1.5"
+    androidTestImplementation "io.mockk:mockk-android:1.10.6"
+}
+
+kapt { correctErrorTypes = true }
