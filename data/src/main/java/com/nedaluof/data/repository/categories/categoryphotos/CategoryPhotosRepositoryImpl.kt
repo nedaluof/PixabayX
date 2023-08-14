@@ -54,16 +54,7 @@ class CategoryPhotosRepositoryImpl @Inject constructor(
     photoId: Long
   ): CategoryPhotoPagingKey? =
     categoryPhotoPagingKeysDao.getCategoryPhotoPagingKeyByIds(categoryId, photoId)
-
-  override suspend fun getDefaultCategoryPhotoPagingKey(categoryId: Int): CategoryPhotoPagingKey {
-    return CategoryPhotoPagingKey(
-      categoryId = categoryId,
-      photoId = 0,
-      prevKey = null,
-      currentPage = 1,
-      nextKey = 1
-    )
-  }
+  
 
   override suspend fun getLastCreationTimeOfPagingKey(): Long? =
     categoryPhotoPagingKeysDao.getLastCreationTime()

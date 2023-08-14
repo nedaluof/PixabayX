@@ -6,7 +6,6 @@ import com.squareup.moshi.JsonClass
 /**
  * Created By NedaluOf - 7/22/2023.
  */
-
 @JsonClass(generateAdapter = true)
 data class LoadPhotosResponse(
   val total : Long,

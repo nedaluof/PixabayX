@@ -53,12 +53,6 @@ interface CategoryPhotosRepository {
     photoId: Long
   ): CategoryPhotoPagingKey?
 
-  /**
-   * get category photo paging key by its @params [photoId] [categoryId]
-   * */
-  suspend fun getDefaultCategoryPhotoPagingKey(
-    categoryId: Int,
-  ): CategoryPhotoPagingKey
 
   /**
    * get last category photo paging key creation time

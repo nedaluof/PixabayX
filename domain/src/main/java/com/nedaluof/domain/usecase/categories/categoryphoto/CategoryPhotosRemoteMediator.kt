@@ -1,128 +1,64 @@
 package com.nedaluof.domain.usecase.categories.categoryphoto
 
-import androidx.paging.ExperimentalPagingApi
-import androidx.paging.LoadType
-import androidx.paging.PagingState
-import androidx.paging.RemoteMediator
+import com.nedaluof.data.model.apiresponse.LoadPhotosResponse
+import com.nedaluof.data.model.apiresponse.PhotoData
 import com.nedaluof.data.model.db.category.categoryphotos.CategoryPhotoEntity
 import com.nedaluof.data.model.db.category.categoryphotos.CategoryPhotoPagingKey
 import com.nedaluof.data.repository.categories.categoryphotos.CategoryPhotosRepository
 import com.nedaluof.domain.model.category.CategoryModel
-import com.nedaluof.domain.utils.exceptionMessage
-import kotlinx.coroutines.delay
-import timber.log.Timber
-import java.util.concurrent.TimeUnit
+import com.nedaluof.domain.usecase.base.BaseRemoteMediator
+import retrofit2.Response
 
 /**
  * Created By NedaluOf - 7/29/2023.
  */
-@OptIn(ExperimentalPagingApi::class)
 class CategoryPhotosRemoteMediator(
   private val category: CategoryModel,
   private val repository: CategoryPhotosRepository
-) : RemoteMediator<Int, CategoryPhotoEntity>() {
+) :
+  BaseRemoteMediator<CategoryPhotoEntity, CategoryPhotoPagingKey, LoadPhotosResponse, PhotoData>() {
 
-  override suspend fun initialize(): InitializeAction {
-    val cacheTimeout = TimeUnit.MILLISECONDS.convert(1, TimeUnit.HOURS)
-    return if (System.currentTimeMillis() - (repository.getLastCreationTimeOfPagingKey()
-        ?: 0) < cacheTimeout
-    ) {
-      InitializeAction.SKIP_INITIAL_REFRESH
-    } else {
-      InitializeAction.LAUNCH_INITIAL_REFRESH
-    }
+
+  override suspend fun getLastCreationTimeOfPagingKey() =
+    repository.getLastCreationTimeOfPagingKey()
+
+  override suspend fun getPagingKeyByEntity(entity: CategoryPhotoEntity) =
+    repository.getCategoryPhotoPagingKeyByIds(entity.categoryId, entity.photoData.id)
+
+  override suspend fun requestApi(page: Int) =
+    repository.loadCategoryPhotosList(category.name, page)
+
+  override suspend fun getDataListFromResponse(response: Response<LoadPhotosResponse>) =
+    response.body()?.hits
+
+  override suspend fun <T> transactionBlock(block: suspend () -> T) =
+    repository.transactionBlock(block)
+
+  override suspend fun clearDataAndPagingKeysTables() {
+    repository.clearCategoryPhotoPagingKeysTable()
+    repository.clearCategoryPhotosTable()
   }
 
-  private suspend fun getPagingKeyClosestToCurrentPosition(state: PagingState<Int, CategoryPhotoEntity>): CategoryPhotoPagingKey? {
-    return state.anchorPosition?.let { position ->
-      state.closestItemToPosition(position)?.let { entity ->
-        repository.getCategoryPhotoPagingKeyByIds(entity.categoryId, entity.photoData.id)
-      }
-    }
-  }
-
-  private suspend fun getPagingKeyForFirstItem(state: PagingState<Int, CategoryPhotoEntity>): CategoryPhotoPagingKey? {
-    return state.pages.firstOrNull {
-      it.data.isNotEmpty()
-    }?.data?.firstOrNull()?.let { entity ->
-      repository.getCategoryPhotoPagingKeyByIds(entity.categoryId, entity.photoData.id)
-    }
-  }
-
-  private suspend fun getPagingKeyForLastItem(state: PagingState<Int, CategoryPhotoEntity>): CategoryPhotoPagingKey? {
-    return state.pages.lastOrNull {
-      it.data.isNotEmpty()
-    }?.data?.lastOrNull()?.let { entity ->
-      repository.getCategoryPhotoPagingKeyByIds(entity.categoryId, entity.photoData.id)
-    }
-  }
-
-  override suspend fun load(
-    loadType: LoadType,
-    state: PagingState<Int, CategoryPhotoEntity>
-  ): MediatorResult {
-    val currentPage: Int = when (loadType) {
-      LoadType.REFRESH -> {
-        val pagingKey = getPagingKeyClosestToCurrentPosition(state)
-        pagingKey?.nextKey?.minus(PAGE) ?: PAGE
-      }
-
-      LoadType.PREPEND -> {
-        val pagingKey = getPagingKeyForFirstItem(state)
-        pagingKey?.prevKey
-          ?: return MediatorResult.Success(endOfPaginationReached = pagingKey != null)
-      }
-
-      LoadType.APPEND -> {
-        val pagingKey = getPagingKeyForLastItem(state)
-        pagingKey?.nextKey ?: PAGE
+  override suspend fun insertNewData(
+    data: List<PhotoData>,
+    nextKey: Int?,
+    prevKey: Int?,
+    currentPage: Int
+  ) {
+    val pagingKeys = data.map { photoData ->
+      CategoryPhotoPagingKey(
+        categoryId = category.id,
+        photoId = photoData.id,
+      ).also {
+        it.prevKey = prevKey
+        it.currentPage = currentPage
+        it.nextKey = nextKey
       }
     }
 
-    try {
-      val apiResponse = repository.loadCategoryPhotosList(category.name, currentPage)
-      val categoryPhotosList = apiResponse.body()?.hits ?: emptyList()
-      val endOfPaginationReached = categoryPhotosList.isEmpty()
-
-      /**
-       * to avoid rate limit error from the api owners
-       * which is 100 request per minute
-       * */
-      delay(1000)
-
-      repository.transactionBlock {
-        if (loadType == LoadType.REFRESH) {
-          //clear tables if LoadType is REFRESH
-          repository.clearCategoryPhotoPagingKeysTable()
-          repository.clearCategoryPhotosTable()
-        }
-        //calculate new keys
-        val prevKey = if (currentPage > PAGE) currentPage - PAGE else null
-        val nextKey = if (endOfPaginationReached) null else currentPage + PAGE
-        Timber.e("new page -> $nextKey")
-        val pagingKeys = categoryPhotosList.map {
-          CategoryPhotoPagingKey(
-            categoryId = category.id,
-            photoId = it.id,
-            prevKey = prevKey,
-            currentPage = currentPage,
-            nextKey = nextKey
-          )
-        }
-
-        repository.insertCategoryPhotoPagingKeys(pagingKeys)
-        repository.insertCategoryPhotosEntitiesList(categoryPhotosList.map {
-          CategoryPhotoEntity(categoryId = category.id, photoData = it)
-        })
-      }
-      return MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
-    } catch (exception: Exception) {
-      Timber.e(exception.exceptionMessage())
-      return MediatorResult.Error(exception)
-    }
-  }
-
-  companion object {
-    private const val PAGE = 1
+    repository.insertCategoryPhotoPagingKeys(pagingKeys)
+    repository.insertCategoryPhotosEntitiesList(data.map {
+      CategoryPhotoEntity(categoryId = category.id, photoData = it)
+    })
   }
 }
