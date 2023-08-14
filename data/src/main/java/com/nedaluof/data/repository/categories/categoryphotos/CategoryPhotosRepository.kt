@@ -55,7 +55,9 @@ interface CategoryPhotosRepository {
 
 
   /**
-   * get last category photo paging key creation time
+   * request last category photo paging key
+   * creation time from the client
+   * @return [Long]
    * */
   suspend fun getLastCreationTimeOfPagingKey(): Long?
 

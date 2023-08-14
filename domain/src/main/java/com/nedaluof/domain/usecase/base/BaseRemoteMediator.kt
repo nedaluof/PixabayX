@@ -20,23 +20,56 @@ import java.util.concurrent.TimeUnit
 abstract class BaseRemoteMediator<ENTITY : Any, PAGING_KEY : PagingKey, RESPONSE, RESPONSE_DATA> :
   RemoteMediator<Int, ENTITY>() {
 
+  /**
+   * request last category photo paging key
+   * creation time from the client
+   * @return [Long]
+   * */
   abstract suspend fun getLastCreationTimeOfPagingKey(): Long?
+
+  /**
+   * request paging key by [ENTITY] from the client
+   * @return [PAGING_KEY]?
+   * */
   abstract suspend fun getPagingKeyByEntity(
     entity: ENTITY
   ): PAGING_KEY?
 
+  /**
+   * request Api service with [page] from the client
+   * @return Response<[RESPONSE]>
+   * */
   abstract suspend fun requestApi(
     page : Int
   ): Response<RESPONSE>
+
+  /**
+   * request appropriate data from the client
+   * by the received response
+   * @return List<[RESPONSE_DATA]>
+   * */
   abstract suspend fun getDataListFromResponse(
     response: Response<RESPONSE>
   ): List<RESPONSE_DATA>?
 
+  /**
+   * request database transaction block from the client
+   * */
   abstract suspend fun <T> transactionBlock(
     block: suspend () -> T
   ): T?
 
+  /**
+   * ask the client to clear tables when
+   * LoadType is REFRESH
+   * */
   abstract suspend fun clearDataAndPagingKeysTables()
+
+  /**
+   * ask the client to insert new data with
+   * pagination keys into corresponding
+   * database tables
+   * */
   abstract suspend fun insertNewData(
     data: List<RESPONSE_DATA>,
     nextKey: Int?,

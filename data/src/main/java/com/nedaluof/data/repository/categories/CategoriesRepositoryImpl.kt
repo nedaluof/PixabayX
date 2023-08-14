@@ -17,8 +17,4 @@ class CategoriesRepositoryImpl @Inject constructor(
     get() = database.getCategoriesDao()
 
   override fun loadCategoriesList(): Flow<List<CategoryEntity>> = categoriesDao.loadCategoriesList()
-
-  override suspend fun insertCategoriesEntitiesList(list: List<CategoryEntity>) {
-    categoriesDao.insertCategoriesList(list)
-  }
 }

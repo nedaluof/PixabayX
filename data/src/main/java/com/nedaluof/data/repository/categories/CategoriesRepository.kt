@@ -14,9 +14,4 @@ interface CategoriesRepository {
    * */
   fun loadCategoriesList(): Flow<List<CategoryEntity>>
 
-  /**
-   * insert @param CategoryEntity [list] into categories table
-   * */
-  suspend fun insertCategoriesEntitiesList(list: List<CategoryEntity>)
-
 }
