@@ -34,6 +34,15 @@ class SearchPhotosFragment :
   //end region
 
   //region view related
+
+  override fun onBindingReady() {
+    with(binding) {
+      viewModel = this@SearchPhotosFragment.searchPhotosViewModel
+      lifecycleOwner = viewLifecycleOwner
+      executePendingBindings()
+    }
+  }
+
   override fun initViews() {
     initSearchEditText()
     initPhotosRecyclerView()
@@ -116,8 +125,8 @@ class SearchPhotosFragment :
   }
   //endregion
 
-  override fun onDestroyView() {
-    super.onDestroyView()
+  override fun onDestroy() {
+    super.onDestroy()
     searchPhotosJob?.cancel()
   }
 }

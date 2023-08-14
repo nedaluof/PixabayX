@@ -27,6 +27,15 @@ class PopularPhotosFragment :
   //end region
 
   //region view related
+
+  override fun onBindingReady() {
+    with(binding) {
+      viewModel = popularPhotosViewModel
+      lifecycleOwner = viewLifecycleOwner
+      executePendingBindings()
+    }
+  }
+
   override fun initViews() {
     initPhotosRecyclerView()
   }
@@ -67,10 +76,17 @@ class PopularPhotosFragment :
 
   //region listen to view model
   override fun observeViewModel() {
-    photosJob?.cancel()
-    photosJob = popularPhotosViewModel.photos.collectFlow { data ->
-      photosPagedAdapter?.submitData(data)
+    photosJob = popularPhotosViewModel.popularPhotos.collectFlow { data ->
+      data?.let {
+        photosPagedAdapter?.submitData(data)
+      }
     }
   }
   //endregion
+
+
+  override fun onDestroy() {
+    super.onDestroy()
+    photosJob?.cancel()
+  }
 }

@@ -7,6 +7,7 @@ import androidx.paging.cachedIn
 import com.nedaluof.domain.model.category.CategoryModel
 import com.nedaluof.domain.model.photos.PhotoModel
 import com.nedaluof.domain.usecase.categories.categoryphoto.CategoryPhotosUseCase
+import com.nedaluof.pixabayx.utils.ext.postDelayed
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -25,6 +26,10 @@ class CategoryPhotosViewModel @Inject constructor(
   //region variables
   private val _photos = MutableStateFlow<PagingData<PhotoModel>?>(null)
   val photos = _photos.asStateFlow()
+
+  private val _loading = MutableStateFlow(false)
+  val loading = _loading.asStateFlow()
+
   private var isLoadedForFirstTime = false
   //endregion
 
@@ -33,7 +38,11 @@ class CategoryPhotosViewModel @Inject constructor(
     category: CategoryModel
   ) {
     if (!isLoadedForFirstTime) {
+      _loading.value = true
       viewModelScope.launch {
+        if (_loading.value) {
+          { _loading.value = false }.postDelayed(1000)
+        }
         isLoadedForFirstTime = true
         categoryPhotosUseCase.loadCategoryPhotos(category).cachedIn(this).collectLatest {
           _photos.value = it

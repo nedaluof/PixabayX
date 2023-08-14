@@ -53,6 +53,7 @@ class CategoryPhotosFragment :
   override fun initViews() {
     with(binding) {
       category = categoryModel
+      viewModel = categoryPhotosViewModel
       lifecycleOwner = this@CategoryPhotosFragment
       executePendingBindings()
     }

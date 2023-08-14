@@ -3,6 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.nedaluof.pixabayx.ui.main.popular.PopularPhotosViewModel" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -17,9 +24,21 @@
             android:paddingTop="@dimen/_2sdp"
             android:paddingBottom="@dimen/_2sdp"
             android:scrollbars="none"
+            app:ctrlVisibility="@{!viewModel.loading}"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:spanCount="2"
             tools:itemCount="5"
             tools:listitem="@layout/item_photo" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animation_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/_4sdp"
+            android:layout_marginEnd="@dimen/_4sdp"
+            app:ctrlVisibility="@{viewModel.loading}"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/pixabay_x_intro_night" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
