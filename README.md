@@ -1,6 +1,6 @@
 # PixabayX
 
-PixabayX 🖼️ is an Android app that fetch and cache images from [Bixabay API](https://pixabay.com/api/docs/), this app shows the best practices when you want to apply paging and caching for the paginated data.
+PixabayX 🖼️ is an Android app that fetch and cache images from [Pixabay API](https://pixabay.com/api/docs/), this app shows the best practices when you want to apply paging and caching for the paginated data.
  <p align="center">
         <img src="https://github.com/nedaluof/PixabayX/blob/master/art/bixapay_x_animated.gif" width="200">
         <img src="https://github.com/nedaluof/PixabayX/blob/master/art/pixabay_x_1.PNG" width="200">
